@@ -11,5 +11,9 @@ use App\Http\Controllers\UserController;
 
 Route::post('/user/login', [UserController::class, 'login']); // ログイン
 Route::post('/user/register', [UserController::class, 'register']); // ログイン
-Route::post('/user/logout', [UserController::class, 'logout']); // ログイン
-Route::apiResource('test', TestController::class);
+
+Route::group(['middleware' => ['auth:sanctum']], function () 
+{
+    Route::post('/user/logout', [UserController::class, 'logout']); // ログイン
+    Route::apiResource('test', TestController::class);
+});
