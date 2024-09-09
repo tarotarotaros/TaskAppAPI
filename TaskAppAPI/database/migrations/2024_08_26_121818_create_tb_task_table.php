@@ -14,7 +14,7 @@ class CreateTbTaskTable extends Migration
     public function up()
     {
         Schema::create('tb_task_table', function (Blueprint $table) {
-            $table->integer('task_id')->comment('タスクID')->primary();
+            $table->increments('task_id')->comment('タスクID');
             $table->char('task_name')->comment('タスク名');
             $table->char('content')->nullable()->comment('内容');
             $table->integer('priority')->nullable()->comment('優先度');
@@ -24,9 +24,9 @@ class CreateTbTaskTable extends Migration
             $table->integer('miled')->nullable()->comment('マイルストーン');
             $table->time('milestone')->nullable()->comment('実績時間');
             $table->char('manager')->nullable()->comment('担当者');
-            $table->date('create_date')->comment('作成日');
+            // 'create_date' と 'update_date' は不要になる
+            $table->timestamps(); // これが 'created_at' と 'updated_at' を作成
             $table->char('created_by')->comment('作成者');
-            $table->date('update_date')->comment('更新日');
             $table->char('updated_by')->comment('更新者');
             $table->integer('update_count')->comment('更新回数');
         });
