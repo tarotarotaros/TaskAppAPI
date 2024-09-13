@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Task;
 
@@ -59,6 +60,11 @@ class TaskController extends Controller
             'manager' => 'nullable',
             'updated_by' => 'required',
         ]);
+
+        // 'deadline' が存在する場合、フォーマットを修正
+        if (isset($validated['deadline'])) {
+            $validated['deadline'] = Carbon::parse($validated['deadline'])->format('Y-m-d H:i:s');
+        }
 
         // タスク更新
         $task->update(array_merge($validated, [
