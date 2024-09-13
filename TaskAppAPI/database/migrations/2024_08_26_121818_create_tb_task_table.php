@@ -19,6 +19,8 @@ class CreateTbTaskTable extends Migration
             $table->char('content')->nullable()->comment('内容');
             $table->integer('priority')->nullable()->comment('優先度');
             $table->date('deadline')->nullable()->comment('期限日');
+            $table->date('start')->nullable()->comment('開始日');
+            $table->date('end')->nullable()->comment('終了日');
             $table->integer('project')->nullable()->comment('プロジェクト');
             $table->integer('status')->nullable()->comment('ステータス');
             $table->integer('miled')->nullable()->comment('マイルストーン');

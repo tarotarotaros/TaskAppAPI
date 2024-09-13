@@ -23,6 +23,8 @@ class TaskController extends Controller
             'content' => 'nullable',
             'priority' => 'nullable|integer',
             'deadline' => 'nullable|date',
+            'start' => 'nullable|date',
+            'end' => 'nullable|date',
             'project' => 'nullable|integer',
             'status' => 'nullable|integer',
             'miled' => 'nullable|integer',
@@ -31,6 +33,19 @@ class TaskController extends Controller
             'created_by' => 'required',
             'updated_by' => 'required',
         ]);
+
+        // 'deadline' が存在する場合、フォーマットを修正
+        if (isset($validated['deadline'])) {
+            $validated['deadline'] = Carbon::parse($validated['deadline'])->format('Y-m-d H:i:s');
+        }
+
+        if (isset($validated['start'])) {
+            $validated['start'] = Carbon::parse($validated['start'])->format('Y-m-d H:i:s');
+        }
+
+        if (isset($validated['end'])) {
+            $validated['end'] = Carbon::parse($validated['end'])->format('Y-m-d H:i:s');
+        }
 
         // 新しいタスクを作成
         $task = Task::create(array_merge($validated, [
@@ -53,6 +68,8 @@ class TaskController extends Controller
             'content' => 'nullable',
             'priority' => 'nullable|integer',
             'deadline' => 'nullable|date',
+            'start' => 'nullable|date',
+            'end' => 'nullable|date',
             'project' => 'nullable|integer',
             'status' => 'nullable|integer',
             'miled' => 'nullable|integer',
@@ -64,6 +81,14 @@ class TaskController extends Controller
         // 'deadline' が存在する場合、フォーマットを修正
         if (isset($validated['deadline'])) {
             $validated['deadline'] = Carbon::parse($validated['deadline'])->format('Y-m-d H:i:s');
+        }
+
+        if (isset($validated['start'])) {
+            $validated['start'] = Carbon::parse($validated['start'])->format('Y-m-d H:i:s');
+        }
+
+        if (isset($validated['end'])) {
+            $validated['end'] = Carbon::parse($validated['end'])->format('Y-m-d H:i:s');
         }
 
         // タスク更新

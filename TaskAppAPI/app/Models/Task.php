@@ -21,6 +21,8 @@ class Task extends Model
         'content',
         'priority',
         'deadline',
+        'start',
+        'end',
         'project',
         'status',
         'miled',
