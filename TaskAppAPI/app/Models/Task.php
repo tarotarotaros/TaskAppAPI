@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     // テーブル名
-    protected $table = 'tb_task_table';
+    protected $table = 'tb_task';
 
     // プライマリキーのカラム名
     protected $primaryKey = 'task_id';
@@ -27,7 +27,7 @@ class Task extends Model
         'status',
         'miled',
         'milestone',
-        'manager',
+        'assignee',
         'created_by',
         'updated_by',
         'update_count'

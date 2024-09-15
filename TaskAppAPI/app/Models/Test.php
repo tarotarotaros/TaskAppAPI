@@ -9,7 +9,7 @@ class Test extends Model
 {
     use HasFactory;
 
-    protected $table = 'tb_test_table';
+    protected $table = 'tb_test';
 
     protected $fillable = [
         'name',

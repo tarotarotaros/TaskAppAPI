@@ -29,7 +29,7 @@ class TaskController extends Controller
             'status' => 'nullable|integer',
             'miled' => 'nullable|integer',
             'milestone' => 'nullable',
-            'manager' => 'nullable',
+            'assignee' => 'nullable|integer',
             'created_by' => 'required',
             'updated_by' => 'required',
         ]);
@@ -64,7 +64,7 @@ class TaskController extends Controller
 
         // バリデーション
         $validated = $request->validate([
-            'task_name' => 'required',
+            'task_name' => 'nullable',
             'content' => 'nullable',
             'priority' => 'nullable|integer',
             'deadline' => 'nullable|date',
@@ -74,7 +74,7 @@ class TaskController extends Controller
             'status' => 'nullable|integer',
             'miled' => 'nullable|integer',
             'milestone' => 'nullable',
-            'manager' => 'nullable',
+            'assignee' => 'nullable|integer',
             'updated_by' => 'required',
         ]);
 
