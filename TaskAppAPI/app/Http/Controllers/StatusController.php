@@ -7,13 +7,13 @@ use App\Models\Status;
 
 class StatusController extends Controller
 {
-    // 全ての優先度を取得
+    // 全てのステータスを取得
     public function index()
     {
         return response()->json(Status::all());
     }
 
-    // 優先度を1つ登録
+    // ステータスを1つ登録
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -28,7 +28,7 @@ class StatusController extends Controller
         return response()->json($status, 201);
     }
 
-    // 優先度を1つ削除
+    // ステータスを1つ削除
     public function destroy($id)
     {
         $status = Status::find($id);
@@ -40,5 +40,27 @@ class StatusController extends Controller
         $status->delete();
 
         return response()->json(['message' => 'Status deleted'], 200);
+    }
+
+    // ステータス更新
+    public function update(Request $request, $id)
+    {
+        $status = Status::findOrFail($id);
+
+        // バリデーション
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'nullable',
+            'updated_by' => 'required',
+        ]);
+
+
+        // ステータス更新
+        $status->update(array_merge($validated, [
+            'update_date' => now(),
+            'update_count' => $status->update_count + 1,
+        ]));
+
+        return response()->json($status);
     }
 }

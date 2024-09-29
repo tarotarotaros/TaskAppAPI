@@ -40,4 +40,25 @@ class PriorityController extends Controller
 
         return response()->json(['message' => 'Priority deleted'], 200);
     }
+
+
+    // 優先度更新
+    public function update(Request $request, $id)
+    {
+        $priority = Priority::findOrFail($id);
+
+        // バリデーション
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'updated_by' => 'required',
+        ]);
+
+        // 優先度更新
+        $priority->update(array_merge($validated, [
+            'update_date' => now(),
+            'update_count' => $priority->update_count + 1,
+        ]));
+
+        return response()->json($priority);
+    }
 }

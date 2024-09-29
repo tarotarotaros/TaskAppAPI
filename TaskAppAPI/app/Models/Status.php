@@ -11,4 +11,9 @@ class Status extends Model
 
     // テーブル名を指定
     protected $table = 'tb_status';
+
+    // マスアサインメントを許可するフィールド
+    protected $fillable = [
+        'name',
+    ];
 }

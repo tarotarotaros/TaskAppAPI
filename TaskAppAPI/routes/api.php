@@ -22,13 +22,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/priorities', [PriorityController::class, 'index']);
     Route::post('/priorities', [PriorityController::class, 'store']);
+    Route::put('/priorities/{id}', [PriorityController::class, 'update']);
     Route::delete('/priorities/{id}', [PriorityController::class, 'destroy']);
 
     Route::get('/assignees', [AssigneeController::class, 'index']);
     Route::post('/assignees', [AssigneeController::class, 'store']);
+    Route::put('/assignees/{id}', [AssigneeController::class, 'update']);
     Route::delete('/assignees/{id}', [AssigneeController::class, 'destroy']);
 
     Route::get('/statuses', [StatusController::class, 'index']);
     Route::post('/statuses', [StatusController::class, 'store']);
+    Route::put('/statuses/{id}', [StatusController::class, 'update']);
     Route::delete('/statuses/{id}', [StatusController::class, 'destroy']);
 });

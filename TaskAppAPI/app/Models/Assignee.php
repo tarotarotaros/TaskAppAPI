@@ -11,4 +11,9 @@ class Assignee extends Model
 
     // テーブル名を指定
     protected $table = 'tb_assignee';
+
+    // マスアサインメントを許可するフィールド
+    protected $fillable = [
+        'name',
+    ];
 }

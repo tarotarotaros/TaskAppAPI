@@ -11,4 +11,9 @@ class Priority extends Model
 
     // テーブル名を指定
     protected $table = 'tb_priority';
+
+    // マスアサインメントを許可するフィールド
+    protected $fillable = [
+        'name',
+    ];
 }
