@@ -15,5 +15,6 @@ class Status extends Model
     // マスアサインメントを許可するフィールド
     protected $fillable = [
         'name',
+        'color',
     ];
 }
