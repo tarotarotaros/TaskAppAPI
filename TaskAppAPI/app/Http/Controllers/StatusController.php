@@ -23,6 +23,7 @@ class StatusController extends Controller
 
         $status = Status::create([
             'name' => $validated['name'],
+            'color' => $validated['color'] ?? 'default_color_value', // リクエストでcolorがない場合の処理
         ]);
 
         return response()->json($status, 201);
