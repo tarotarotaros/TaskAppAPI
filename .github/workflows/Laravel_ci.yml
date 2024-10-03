@@ -41,8 +41,11 @@ jobs:
         php-version: '8.0' # バージョンはプロジェクトに合わせてください
         extensions: mbstring, pdo, pdo_mysql, mysql
 
+    - name: Move to TaskAppAPI directory  # TaskAppAPIディレクトリに移動
+      run: cd TaskAppAPI
+
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
+      run: composer install --prefer-dist --no-progress
 
     - name: Set up environment file
       run: cp .env.example .env
