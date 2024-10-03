@@ -19,10 +19,10 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: taskappdb
-          MYSQL_USER: taskappuser
-          MYSQL_PASSWORD: taskappuser
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}  # ルートユーザーのパスワード
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}  # テスト用データベース名
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}  # データベース接続に使用するユーザー
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}  # データベース接続に使用するパスワード
         ports:
           - 3306:3306
         options: >-
@@ -62,9 +62,9 @@ jobs:
         sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
         sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
         sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
-        sed -i 's/DB_DATABASE=.*/DB_DATABASE=taskappdb/' .env
-        sed -i 's/DB_USERNAME=.*/DB_USERNAME=taskappuser/' .env
-        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=taskappuser/' .env
+        sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.MYSQL_DATABASE }}/" .env
+        sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.MYSQL_USER }}/" .env
+        sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}/" .env
         
     - name: Run migrations
       run: |
