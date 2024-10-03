@@ -1,0 +1,82 @@
+name: Laravel CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:  # 手動実行を可能にする
+
+jobs:
+  # Job for running tests
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      # Use MySQL instead of PostgreSQL
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root  # ルートユーザーのパスワード
+          MYSQL_DATABASE: taskappdb_1  # テスト用データベース名
+          MYSQL_USER: taskappuser_1  # データベース接続に使用するユーザー
+          MYSQL_PASSWORD: taskappuser_1  # データベース接続に使用するパスワード
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2' # バージョンはプロジェクトに合わせてください
+        extensions: mbstring, pdo, pdo_mysql, mysql
+
+    - name: Install dependencies
+      run: |
+        cd TaskAppAPI
+        composer install --prefer-dist --no-progress
+        
+    - name: Create .env file
+      run: |
+        cd TaskAppAPI
+        cp .env.example .env
+
+    - name: Update environment variables for MySQL
+      run: |
+        cd TaskAppAPI
+        sed -i 's/# DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+        sed -i 's/# DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i "s/# DB_DATABASE=.*/DB_DATABASE=taskappdb_1/" .env
+        sed -i "s/# DB_USERNAME=.*/DB_USERNAME=taskappuser_1/" .env
+        sed -i "s/# DB_PASSWORD=.*/DB_PASSWORD=taskappuser_1/" .env
+
+    # デバッグ用に .env を確認
+    - name: Debug environment variables
+      run: |
+        cd TaskAppAPI
+        cat .env
+
+    - name: Generate application key
+      run: |
+        cd TaskAppAPI
+        php artisan key:generate
+
+    - name: Run migrations
+      run: |
+        cd TaskAppAPI
+        php artisan migrate
+
+    - name: Run tests
+      run: |
+        cd TaskAppAPI
+        php artisan test
