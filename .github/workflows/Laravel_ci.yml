@@ -46,14 +46,20 @@ jobs:
         cd TaskAppAPI
         composer install --prefer-dist --no-progress
 
+    - name: Create .env file
+      run: |
+        cd TaskAppAPI
+        cp .env.example .env
+
     - name: Set environment variables for MySQL
       run: |
-        export DB_CONNECTION=mysql
-        export DB_HOST=127.0.0.1
-        export DB_PORT=3306
-        export DB_DATABASE=${{ secrets.MYSQL_DATABASE }}
-        export DB_USERNAME=${{ secrets.MYSQL_USER }}
-        export DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+        cd TaskAppAPI
+        echo "DB_CONNECTION=mysql" >> .env
+        echo "DB_HOST=127.0.0.1" >> .env
+        echo "DB_PORT=3306" >> .env
+        echo "DB_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
+        echo "DB_USERNAME=${{ secrets.MYSQL_USER }}" >> .env
+        echo "DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
 
     - name: Generate application key
       run: |
