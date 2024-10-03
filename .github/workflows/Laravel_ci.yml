@@ -1,0 +1,65 @@
+name: Laravel CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  # Job for running tests
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      # Use MySQL instead of PostgreSQL
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: taskappdb
+          MYSQL_USER: taskappuser
+          MYSQL_PASSWORD: taskappuser
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0' # バージョンはプロジェクトに合わせてください
+        extensions: mbstring, pdo, pdo_mysql, mysql
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Set up environment file
+      run: cp .env.example .env
+
+    - name: Generate application key
+      run: php artisan key:generate
+
+    - name: Update environment variables for MySQL
+      run: |
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+        sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=taskappdb/' .env
+        sed -i 's/DB_USERNAME=.*/DB_USERNAME=taskappuser/' .env
+        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=taskappuser/' .env
+
+    - name: Run migrations
+      run: php artisan migrate
+
+    - name: Run tests
+      run: php artisan test
