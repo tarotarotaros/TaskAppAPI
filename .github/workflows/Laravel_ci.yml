@@ -51,15 +51,15 @@ jobs:
         cd TaskAppAPI
         cp .env.example .env
 
-    - name: Set environment variables for MySQL
+    - name: Update environment variables for MySQL
       run: |
         cd TaskAppAPI
-        echo "DB_CONNECTION=mysql" >> .env
-        echo "DB_HOST=127.0.0.1" >> .env
-        echo "DB_PORT=3306" >> .env
-        echo "DB_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
-        echo "DB_USERNAME=${{ secrets.MYSQL_USER }}" >> .env
-        echo "DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+        sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.MYSQL_DATABASE }}/" .env
+        sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.MYSQL_USER }}/" .env
+        sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}/" .env
 
     - name: Generate application key
       run: |
