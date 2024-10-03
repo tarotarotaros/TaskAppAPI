@@ -45,7 +45,7 @@ jobs:
       run: |
         cd TaskAppAPI
         composer install --prefer-dist --no-progress
-
+        
     - name: Create .env file
       run: |
         cd TaskAppAPI
@@ -54,19 +54,18 @@ jobs:
     - name: Update environment variables for MySQL
       run: |
         cd TaskAppAPI
-        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
-        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-        sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
-        sed -i "s/DB_DATABASE=.*/DB_DATABASE=taskappdb_1/" .env
-        sed -i "s/DB_USERNAME=.*/DB_USERNAME=taskappuser_1/" .env
-        sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=taskappuser_1/" .env
+        sed -i 's/# DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+        sed -i 's/# DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i "s/# DB_DATABASE=.*/DB_DATABASE=taskappdb_1/" .env
+        sed -i "s/# DB_USERNAME=.*/DB_USERNAME=taskappuser_1/" .env
+        sed -i "s/# DB_PASSWORD=.*/DB_PASSWORD=taskappuser_1/" .env
 
-    # 環境変数を確認してデバッグする
+    # デバッグ用に .env を確認
     - name: Debug environment variables
       run: |
         cd TaskAppAPI
         cat .env
-        
+
     - name: Generate application key
       run: |
         cd TaskAppAPI
