@@ -106,6 +106,6 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $task->delete();
 
-        return response()->json(['message' => 'タスクが削除されました']);
+        return response()->noContent(); // 204ステータスを返す
     }
 }
