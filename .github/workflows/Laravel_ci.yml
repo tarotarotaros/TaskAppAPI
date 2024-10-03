@@ -61,6 +61,12 @@ jobs:
         sed -i "s/DB_USERNAME=.*/DB_USERNAME=taskappuser_1/" .env
         sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=taskappuser_1/" .env
 
+    # 環境変数を確認してデバッグする
+    - name: Debug environment variables
+      run: |
+        cd TaskAppAPI
+        cat .env
+        
     - name: Generate application key
       run: |
         cd TaskAppAPI
