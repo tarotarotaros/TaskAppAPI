@@ -7,6 +7,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\AssigneeController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\ProjectController;
 
 Route::post('/user/login', [UserController::class, 'login']); // ログイン
 Route::post('/user/register', [UserController::class, 'register']); // 登録
@@ -34,4 +35,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/statuses', [StatusController::class, 'store']);
     Route::put('/statuses/{id}', [StatusController::class, 'update']);
     Route::delete('/statuses/{id}', [StatusController::class, 'destroy']);
+
+    Route::get('projects', [ProjectController::class, 'index']);
+    Route::get('projects/{id}', [ProjectController::class, 'show']);  // ここが必要です
+    Route::post('projects', [ProjectController::class, 'store']);
+    Route::put('projects/{id}', [ProjectController::class, 'update']);
+    Route::delete('projects/{id}', [ProjectController::class, 'destroy']);
 });
