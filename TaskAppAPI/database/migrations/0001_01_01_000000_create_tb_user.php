@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('project')->nullable()->comment('プロジェクト');
+            $table->string('api_token', 80)->nullable()->unique()->default(null);
             $table->rememberToken();
             $table->timestamps();
         });

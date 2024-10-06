@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use \Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -54,6 +55,10 @@ class UserController extends Controller
             $user->tokens()->delete();
             $token = $user->createToken("login:user{$user->id}")->plainTextToken;
 
+            // 生成したトークンをapi_tokenカラムに保存
+            $user->api_token = $token;
+            $user->save();
+
             return response()->json(['token' => $token], Response::HTTP_OK);
         }
 
@@ -71,7 +76,7 @@ class UserController extends Controller
     {
         // バリデーション
         $validator = Validator::make($request->all(), [
-            'project_id' => ['required', 'integer', 'exists:tb_project,id'], // project_idが存在するかチェック
+            'project' => ['required', 'integer', 'exists:tb_project,id'], // project_idが存在するかチェック
         ]);
 
         if ($validator->fails()) {
@@ -81,11 +86,17 @@ class UserController extends Controller
         // ユーザーを取得
         $user = User::findOrFail($id);
 
-        // project_idを更新
+        // projectを更新
         $user->update([
-            'project_id' => $request->project_id,
+            'project' => $request->project,
         ]);
 
-        return response()->json(['message' => 'Project ID updated successfully'], Response::HTTP_OK);
+        return response()->json(['message' => 'Project ID updated successfully', 'project' => $user->project], Response::HTTP_OK);
+    }
+
+    // プロジェクトを取得
+    public function show($id)
+    {
+        return User::findOrFail($id);
     }
 }
