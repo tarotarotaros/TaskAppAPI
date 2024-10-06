@@ -36,7 +36,8 @@ class UserController extends Controller
     }
 
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         // バリデーション
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'email'],
@@ -53,7 +54,7 @@ class UserController extends Controller
             $user->tokens()->delete();
             $token = $user->createToken("login:user{$user->id}")->plainTextToken;
 
-            return response()->json(['token' => $token ], Response::HTTP_OK);
+            return response()->json(['token' => $token], Response::HTTP_OK);
         }
 
         return response()->json('User unauthorized', Response::HTTP_UNAUTHORIZED);
@@ -65,5 +66,26 @@ class UserController extends Controller
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'ログアウトしました。'], 200);
     }
-        
+
+    public function updateProjectId(Request $request, $id)
+    {
+        // バリデーション
+        $validator = Validator::make($request->all(), [
+            'project_id' => ['required', 'integer', 'exists:tb_project,id'], // project_idが存在するかチェック
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // ユーザーを取得
+        $user = User::findOrFail($id);
+
+        // project_idを更新
+        $user->update([
+            'project_id' => $request->project_id,
+        ]);
+
+        return response()->json(['message' => 'Project ID updated successfully'], Response::HTTP_OK);
+    }
 }
