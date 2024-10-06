@@ -16,7 +16,21 @@ class ProjectController extends Controller
     // プロジェクトを作成
     public function store(Request $request)
     {
-        $project = Project::create($request->all());
+        // バリデーション
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // 新しいプロジェクトを作成
+        $project = Project::create([
+            'name' => $validated['name'],
+            'created_by' => $request['created_by'],
+            'updated_by' => $request['updated_by'],
+            'created_at' => now(),
+            'updated_at' => now(),
+            'update_count' => 0,
+        ]);
+
         return response()->json($project, 201);
     }
 
@@ -30,14 +44,33 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $project = Project::findOrFail($id);
-        $project->update($request->all());
+
+        // バリデーション
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'updated_by' => 'required',
+        ]);
+
+        // 優先度更新
+        $project->update(array_merge($validated, [
+            'update_by' => now(),
+            'update_count' => $project->update_count + 1,
+        ]));
+
         return response()->json($project, 200);
     }
 
     // プロジェクトを削除
     public function destroy($id)
     {
-        Project::findOrFail($id)->delete();
+        $project = Project::find($id);
+
+        if (!$project) {
+            return response()->json(['message' => 'project not found'], 404);
+        }
+
+        $project->delete();
+
         return response()->json(null, 204);
     }
 }

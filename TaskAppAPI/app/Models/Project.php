@@ -10,6 +10,13 @@ class project extends Model
     use HasFactory;
     protected $table = 'tb_project';
 
+
+    // プライマリキーのカラム名
+    protected $primaryKey = 'id';
+
+    // Laravelの自動タイムスタンプ機能を有効化
+    public $timestamps = true;
+
     protected $fillable = [
         'name',
         'is_complete',
