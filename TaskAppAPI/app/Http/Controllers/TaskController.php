@@ -5,17 +5,18 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\User;
 
 class TaskController extends Controller
 {
     // タスク一覧取得
-    public function index()
+    public function index($projectId)
     {
-        return Task::all();
+        return Task::where('project', $projectId)->get();
     }
 
     // タスク登録
-    public function store(Request $request)
+    public function store(Request $request, $userid)
     {
         // バリデーション
         $validated = $request->validate([
@@ -47,8 +48,11 @@ class TaskController extends Controller
             $validated['end'] = Carbon::parse($validated['end'])->format('Y-m-d H:i:s');
         }
 
+        $user = User::findOrFail($userid);
+
         // 新しいタスクを作成
         $task = Task::create(array_merge($validated, [
+            'project' => $user->project,
             'create_date' => now(),
             'update_date' => now(),
             'update_count' => 0,
