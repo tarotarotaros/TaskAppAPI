@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class UserApiTest extends TestCase
 {
@@ -156,5 +157,45 @@ class UserApiTest extends TestCase
 
         // レスポンスの検証
         $response->assertStatus(422);
+    }
+
+    #[Test]
+    public function user_can_be_deleted_successfully()
+    {
+        // テスト用のユーザーを作成
+        $user = User::factory()->create();
+
+        // Sanctumでユーザーとして認証
+        Sanctum::actingAs($user, ['*']);
+
+        // 削除APIを実行
+        $response = $this->deleteJson("/api/users/{$user->id}");
+
+        // ステータスコードが200であることを確認
+        $response->assertStatus(200);
+
+        // 応答メッセージを確認
+        $response->assertJson([
+            'message' => 'User deleted successfully',
+        ]);
+
+        // ユーザーがデータベースに存在しないことを確認
+        $this->assertDatabaseMissing('tb_user', ['id' => $user->id]);
+    }
+
+    #[Test]
+    public function deleting_non_existent_user_returns_not_found()
+    {
+        // テスト用のユーザーを作成して認証
+        $user = User::factory()->create();
+
+        // Sanctumでユーザーとして認証
+        Sanctum::actingAs($user, ['*']);
+
+        // 存在しないユーザーIDで削除APIを実行
+        $response = $this->deleteJson('/api/users/99999'); // 存在しないID
+
+        // ステータスコードが404であることを確認
+        $response->assertStatus(404);
     }
 }

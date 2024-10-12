@@ -157,4 +157,20 @@ class UserController extends Controller
     {
         return User::findOrFail($id);
     }
+
+    public function destroy($id)
+    {
+        // ユーザーをIDで取得
+        $user = User::find($id);
+
+        // ユーザーが存在しない場合
+        if (!$user) {
+            return response()->json('User not found', Response::HTTP_NOT_FOUND);
+        }
+
+        // ユーザーを削除
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully'], Response::HTTP_OK);
+    }
 }
