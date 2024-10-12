@@ -15,6 +15,7 @@ Route::post('/user/register', [UserController::class, 'register']); // 登録
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/logout', [UserController::class, 'logout']); // ログアウト
+
     Route::apiResource('test', TestController::class);
 
     Route::get('/tasks/{projectId}', [TaskController::class, 'index']);       // タスク一覧
@@ -45,6 +46,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::put('/users/{id}/project', [UserController::class, 'updateProjectId']);
     Route::put('/users/{id}/', [UserController::class, 'show']);
+    Route::post('/users/{id}/check-password', [UserController::class, 'checkPassword']);
 
     Route::middleware('auth:api')->get('/user', function (Request $request) {
         return $request->user();

@@ -94,6 +94,34 @@ class UserController extends Controller
         return response()->json(['message' => 'Project ID updated successfully', 'project' => $user->project], Response::HTTP_OK);
     }
 
+    public function checkPassword(Request $request, $id)
+    {
+        // バリデーション
+        $validator = Validator::make($request->all(), [
+            'password' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // ユーザーをIDで取得
+        $user = User::find($id);
+
+        // ユーザーが存在しない場合
+        if (!$user) {
+            return response()->json('User not found', Response::HTTP_NOT_FOUND);
+        }
+
+        // パスワードが一致するか確認
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json('Password is correct', Response::HTTP_OK);
+        }
+
+        return response()->json('Password is incorrect', Response::HTTP_UNAUTHORIZED);
+    }
+
+
     // プロジェクトを取得
     public function show($id)
     {
