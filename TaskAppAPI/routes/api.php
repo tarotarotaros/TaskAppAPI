@@ -47,6 +47,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/users/{id}/project', [UserController::class, 'updateProjectId']);
     Route::put('/users/{id}/', [UserController::class, 'show']);
     Route::post('/users/{id}/check-password', [UserController::class, 'checkPassword']);
+    Route::post('/users/{id}/change-password', [UserController::class, 'changePassword']);
+
 
     Route::middleware('auth:api')->get('/user', function (Request $request) {
         return $request->user();

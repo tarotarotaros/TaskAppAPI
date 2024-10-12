@@ -91,4 +91,70 @@ class UserApiTest extends TestCase
         // レスポンスの検証
         $response->assertStatus(422);
     }
+
+    #[Test]
+    public function change_password_success()
+    {
+        // テストユーザーを作成
+        $user = User::factory()->create([
+            'password' => Hash::make('oldpassword')
+        ]);
+
+        // Sanctumでユーザーとして認証
+        Sanctum::actingAs($user, ['*']);
+
+        // パスワード変更のリクエスト
+        $response = $this->postJson("/api/users/{$user->id}/change-password", [
+            'current_password' => 'oldpassword',
+            'new_password' => 'newpassword',
+            'new_password_confirmation' => 'newpassword'
+        ]);
+
+        // レスポンスの検証
+        $response->assertStatus(200)
+            ->assertExactJson(['Password updated successfully']);
+    }
+
+    #[Test]
+    public function change_password_incorrect_current_password()
+    {
+        // テストユーザーを作成
+        $user = User::factory()->create([
+            'password' => Hash::make('oldpassword')
+        ]);
+
+        // Sanctumでユーザーとして認証
+        Sanctum::actingAs($user, ['*']);
+
+        // 現在のパスワードが間違っている場合のリクエスト
+        $response = $this->postJson("/api/users/{$user->id}/change-password", [
+            'current_password' => 'wrongpassword',
+            'new_password' => 'newpassword',
+            'new_password_confirmation' => 'newpassword'
+        ]);
+
+        // レスポンスの検証
+        $response->assertStatus(401)
+            ->assertExactJson(['Current password is incorrect']);
+    }
+
+    #[Test]
+    public function change_password_validation_error()
+    {
+        // テストユーザーを作成
+        $user = User::factory()->create();
+
+        // Sanctumでユーザーとして認証
+        Sanctum::actingAs($user, ['*']);
+
+        // パスワードバリデーションエラーのリクエスト
+        $response = $this->postJson("/api/users/{$user->id}/change-password", [
+            'current_password' => '',
+            'new_password' => 'short',
+            'new_password_confirmation' => 'differentpassword'
+        ]);
+
+        // レスポンスの検証
+        $response->assertStatus(422);
+    }
 }

@@ -121,6 +121,36 @@ class UserController extends Controller
         return response()->json('Password is incorrect', Response::HTTP_UNAUTHORIZED);
     }
 
+    public function changePassword(Request $request, $id)
+    {
+        // バリデーション
+        $validator = Validator::make($request->all(), [
+            'current_password' => ['required'],
+            'new_password' => ['required', 'min:8', 'confirmed'], // new_password_confirmation を確認
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // ユーザーをIDで取得
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json('User not found', 404);
+        }
+
+        // 現在のパスワードが正しいか確認
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json('Current password is incorrect', 401);
+        }
+
+        // 新しいパスワードを設定
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json('Password updated successfully', 200);
+    }
 
     // プロジェクトを取得
     public function show($id)
