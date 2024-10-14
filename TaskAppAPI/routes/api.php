@@ -45,7 +45,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('projects/{id}', [ProjectController::class, 'destroy']);
 
     Route::put('/users/{id}/project', [UserController::class, 'updateProjectId']);
-    Route::put('/users/{id}/', [UserController::class, 'show']);
+    Route::put('/users/{id}/', [UserController::class, 'update']);
+    Route::get('/users/{id}/', [UserController::class, 'show']);
     Route::post('/users/{id}/check-password', [UserController::class, 'checkPassword']);
     Route::post('/users/{id}/change-password', [UserController::class, 'changePassword']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']); // ユーザー削除

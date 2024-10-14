@@ -142,7 +142,7 @@ class UserController extends Controller
 
         // 現在のパスワードが正しいか確認
         if (!Hash::check($request->current_password, $user->password)) {
-            return response()->json('Current password is incorrect', 401);
+            return response()->json('パスワードが正しくありません。', 401);
         }
 
         // 新しいパスワードを設定
@@ -172,5 +172,32 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json(['message' => 'User deleted successfully'], Response::HTTP_OK);
+    }
+
+
+    // 更新
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        // バリデーション
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required',
+            'updated_by' => 'required',
+        ]);
+
+        // パスワード確認
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json('パスワードが正しくありません。', 401);
+        }
+
+        // 更新
+        $user->update(array_merge($validated, [
+            'update_date' => now(),
+            'update_count' => $user->update_count + 1,
+        ]));
+
+        return response()->json($user);
     }
 }
