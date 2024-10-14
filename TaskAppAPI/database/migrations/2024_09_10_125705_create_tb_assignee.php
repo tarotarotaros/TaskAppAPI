@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_assignee', function (Blueprint $table) {
-            $table->id();
-            $table->string('name'); // 担当者の名前を保存するカラム
+            $table->id()->comment('ID');
+            $table->string('name')->comment('担当者名');
             $table->timestamps();
         });
 

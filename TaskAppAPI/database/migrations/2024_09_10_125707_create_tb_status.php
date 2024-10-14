@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('tb_status', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // ステータスの名前を保存するカラム
-            $table->string('color')->default('black'); // デフォルト値をgrayに設定
+            $table->string('name')->comment('ステータス名');
+            $table->string('color')->default('black')->comment('色');
             $table->timestamps();
         });
 

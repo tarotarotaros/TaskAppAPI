@@ -14,8 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_priority', function (Blueprint $table) {
-            $table->id();
-            $table->string('name'); // 優先度の名前を保存するカラム
+            $table->id()->comment('ID');
+            $table->string('name')->comment('優先度名');
             $table->timestamps();
         });
 
