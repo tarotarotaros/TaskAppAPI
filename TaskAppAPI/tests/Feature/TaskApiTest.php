@@ -28,10 +28,11 @@ class TaskApiTest extends TestCase
         Task::factory()->create([
             'task_name' => 'Test Task',
             'content' => 'This is a test task',
+            'project' => '0'
         ]);
 
         // GETリクエストを送信してタスクリストを取得
-        $response = $this->getJson('/api/tasks');
+        $response = $this->getJson('/api/tasks/0');
 
         // ステータスコード200を期待
         $response->assertStatus(200);
@@ -56,11 +57,15 @@ class TaskApiTest extends TestCase
     public function test_can_create_task()
     {
         // 認証ユーザーの作成
-        $user = User::factory()->create();
+        $user_id = 1;
+        $user = User::factory()->create([
+            'id' => $user_id,
+            'project' => 1
+        ]);
         Sanctum::actingAs($user);
 
         // POSTリクエストでタスクを作成
-        $response = $this->postJson('/api/tasks', [
+        $response = $this->postJson("/api/tasks/{$user_id}", [
             'task_name' => 'New Task',
             'content' => 'Task description',
             'priority' => 1,

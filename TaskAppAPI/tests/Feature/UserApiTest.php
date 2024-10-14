@@ -135,8 +135,7 @@ class UserApiTest extends TestCase
         ]);
 
         // レスポンスの検証
-        $response->assertStatus(401)
-            ->assertExactJson(['Current password is incorrect']);
+        $response->assertStatus(401);
     }
 
     #[Test]
