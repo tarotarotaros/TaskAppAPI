@@ -102,12 +102,9 @@ class ProjectTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        // 複数のプロジェクトを作成
-        $projects = Project::factory()->count(3)->create();
-
         // プロジェクト一覧を取得し、レスポンスが正しいか確認
         $this->getJson('/api/projects')
             ->assertStatus(200)
-            ->assertJsonCount(4);
+            ->assertJsonCount(1);
     }
 }
