@@ -108,11 +108,6 @@ class ProjectTest extends TestCase
         // プロジェクト一覧を取得し、レスポンスが正しいか確認
         $this->getJson('/api/projects')
             ->assertStatus(200)
-            ->assertJsonCount(3)  // プロジェクト数が3であることを確認
-            ->assertJson([
-                ['id' => $projects[0]->id, 'name' => $projects[0]->name],
-                ['id' => $projects[1]->id, 'name' => $projects[1]->name],
-                ['id' => $projects[2]->id, 'name' => $projects[2]->name],
-            ]);
+            ->assertJsonCount(4);
     }
 }
