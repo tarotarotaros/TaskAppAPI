@@ -50,7 +50,7 @@ jobs:
         cp .env.example .env
 
     - name: Update environment variables for MySQL
-      run:
+      run: | 
         sed -i 's/# DB_HOST=.*/DB_HOST=127.0.0.1/' .env
         sed -i 's/# DB_PORT=.*/DB_PORT=3306/' .env
         sed -i "s/# DB_DATABASE=.*/DB_DATABASE=taskappdb_1/" .env
