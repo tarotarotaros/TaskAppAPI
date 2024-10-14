@@ -42,18 +42,15 @@ jobs:
         extensions: mbstring, pdo, pdo_mysql, mysql
 
     - name: Install dependencies
-      run: |
-        cd TaskAppAPI
+      run:
         composer install --prefer-dist --no-progress
         
     - name: Create .env file
-      run: |
-        cd TaskAppAPI
+      run:
         cp .env.example .env
 
     - name: Update environment variables for MySQL
-      run: |
-        cd TaskAppAPI
+      run: | 
         sed -i 's/# DB_HOST=.*/DB_HOST=127.0.0.1/' .env
         sed -i 's/# DB_PORT=.*/DB_PORT=3306/' .env
         sed -i "s/# DB_DATABASE=.*/DB_DATABASE=taskappdb_1/" .env
@@ -62,21 +59,17 @@ jobs:
 
     # デバッグ用に .env を確認
     - name: Debug environment variables
-      run: |
-        cd TaskAppAPI
+      run:
         cat .env
 
     - name: Generate application key
-      run: |
-        cd TaskAppAPI
+      run:
         php artisan key:generate
 
     - name: Run migrations
-      run: |
-        cd TaskAppAPI
+      run:
         php artisan migrate
 
     - name: Run tests
-      run: |
-        cd TaskAppAPI
+      run:
         php artisan test --testsuite=Feature
