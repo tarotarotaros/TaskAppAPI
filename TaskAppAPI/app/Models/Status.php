@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Test extends Model
+class Status extends Model
 {
     use HasFactory;
 
-    protected $table = 'tb_test';
+    // テーブル名を指定
+    protected $table = 'tb_status';
 
+    // マスアサインメントを許可するフィールド
     protected $fillable = [
         'name',
-        'old',
+        'color',
     ];
 }

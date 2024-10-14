@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'token',  // ここが重要
+            'provider' => 'users',
+        ],
     ],
 
     /*

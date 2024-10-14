@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTbTaskTable extends Migration
+class CreateTbTask extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,22 @@ class CreateTbTaskTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_task_table', function (Blueprint $table) {
-            $table->integer('task_id')->comment('タスクID')->primary();
+        Schema::create('tb_task', function (Blueprint $table) {
+            $table->increments('task_id')->comment('タスクID');
             $table->char('task_name')->comment('タスク名');
             $table->char('content')->nullable()->comment('内容');
             $table->integer('priority')->nullable()->comment('優先度');
             $table->date('deadline')->nullable()->comment('期限日');
+            $table->date('start')->nullable()->comment('開始日');
+            $table->date('end')->nullable()->comment('終了日');
             $table->integer('project')->nullable()->comment('プロジェクト');
             $table->integer('status')->nullable()->comment('ステータス');
             $table->integer('miled')->nullable()->comment('マイルストーン');
             $table->time('milestone')->nullable()->comment('実績時間');
-            $table->char('manager')->nullable()->comment('担当者');
-            $table->date('create_date')->comment('作成日');
+            $table->integer('assignee')->nullable()->comment('担当者');
+            // 'create_date' と 'update_date' は不要になる
+            $table->timestamps(); // これが 'created_at' と 'updated_at' を作成
             $table->char('created_by')->comment('作成者');
-            $table->date('update_date')->comment('更新日');
             $table->char('updated_by')->comment('更新者');
             $table->integer('update_count')->comment('更新回数');
         });
@@ -39,6 +41,6 @@ class CreateTbTaskTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_task_table');
+        Schema::dropIfExists('tb_task');
     }
 }
