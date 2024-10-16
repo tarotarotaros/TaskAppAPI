@@ -19,6 +19,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('test', TestController::class);
 
     Route::get('/tasks/{projectId}', [TaskController::class, 'index']);       // タスク一覧
+    Route::get('/tasks/{userid}/whereUser', [TaskController::class, 'indexWhereUser']); // タスク一覧（ユーザーフィルター）
     Route::post('/tasks/{userid}', [TaskController::class, 'store']);      // タスク登録
     Route::put('/tasks/{id}', [TaskController::class, 'update']); // タスク更新
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy']); // タスク削除
@@ -44,6 +45,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('projects/{id}', [ProjectController::class, 'update']);
     Route::delete('projects/{id}', [ProjectController::class, 'destroy']);
 
+    Route::get('/users', [UserController::class, 'index']); // ユーザー一覧
     Route::put('/users/{id}/project', [UserController::class, 'updateProjectId']);
     Route::put('/users/{id}/', [UserController::class, 'update']);
     Route::get('/users/{id}/', [UserController::class, 'show']);
