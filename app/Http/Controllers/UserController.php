@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+
+    // ユーザー一覧
+    public function index()
+    {
+        return response()->json(User::all());
+    }
+
     public function register(Request $request)
     {
         // バリデーション

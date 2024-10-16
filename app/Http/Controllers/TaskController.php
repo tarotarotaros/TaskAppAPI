@@ -15,6 +15,12 @@ class TaskController extends Controller
         return Task::where('project', $projectId)->get();
     }
 
+    // ユーザーIDでフィルターしたタスク一覧取得
+    public function indexWhereUser($userid)
+    {
+        return Task::where('assignee', $userid)->get();
+    }
+
     // タスク登録
     public function store(Request $request, $userid)
     {
